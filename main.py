@@ -14,7 +14,7 @@ from telegram.error import BadRequest
 class FilterNewChatMembers(BaseFilter):
     ''' Фильтрация сообщений о входе '''
     def __init__(self):
-        # Пользователи проходящие проверку каптчей
+        # Пользователи проходящие проверку капчей
         self.status_members = ['member', 'restricted', 'left', 'kicked']
 
     def __call__(self, update):
@@ -23,7 +23,7 @@ class FilterNewChatMembers(BaseFilter):
         message = update.effective_message
 
         if message.new_chat_members:
-            # Проверка, если пользователю уже давалась каптча
+            # Проверка, если пользователю уже давалась капча
             with con.cursor() as cur:
                 cur.execute('SELECT * FROM banlist WHERE chat_id=%s AND user_id=%s',
                             (chat_id, user_id))
@@ -64,9 +64,9 @@ def banUser():
 
 def captcha(update, context):
     '''
-    Создаёт каптчу, и отсылает пользователю,
+    Создаёт капчу, и отсылает пользователю,
     при этом заносит его в базу данных, если не
-    ответит на неё в течении дня - будет кикнут
+    ответит на неё в течение дня - будет кикнут
     '''
 
     user = update.effective_user
@@ -103,7 +103,7 @@ def captcha(update, context):
 
 def checkCorrectlyCaptcha(update, context):
     '''
-    Проверяю правильность ответа пользователя на каптчу,
+    Проверяю правильность ответа пользователя на капчу,
     если ответ правильный, то ограничение readonly снимается,
     если нет, то кик через 3-ок суток и отправляется сообщение
     с направлением к админу за разблокировкой
@@ -122,9 +122,9 @@ def checkCorrectlyCaptcha(update, context):
         record = cur.fetchone()
 
         if record:
-            # Удаляю сообщение с каптчей
+            # Удаляю сообщение с капчей
             context.bot.delete_message(chat.id, message_id)
-            # Проверяю ответ пользователя на каптчу
+            # Проверяю ответ пользователя на капчу
             if user_captcha_answer == str(record[0]):
                 cur.execute(
                     'DELETE FROM banlist WHERE user_id=%s AND chat_id=%s',
@@ -148,7 +148,7 @@ def checkCorrectlyCaptcha(update, context):
 
                 context.bot.send_message(
                     chat_id=update.effective_chat.id,
-                    text="%s, каптча введена не правильно, обратитесь к админу в течении 3-х дней для разблокировки, иначе будете кикнуты." % username
+                    text="%s, капча введена не правильно, обратитесь к админу в течении 3-х дней для разблокировки." % username
                 )
                 cur.execute(
                     'UPDATE banlist SET time=%s WHERE user_id=%s AND chat_id=%s',
