@@ -66,7 +66,7 @@ def captcha(update, context):
     '''
     Создаёт капчу, и отсылает пользователю,
     при этом заносит его в базу данных, если не
-    ответит на неё в течение дня - будет кикнут
+    ответит на неё в течении дня - будет кикнут
     '''
 
     user = update.effective_user
@@ -77,7 +77,10 @@ def captcha(update, context):
     if update.effective_user.username:
         username = "@" + user.username
     else:
-        username = " ".join([user.first_name, user.last_name])
+        try:
+            username = " ".join([user.first_name, user.last_name])
+        except:
+            username = "*какая-то дичь, а не ник*"
 
     keyboard = InlineKeyboardMarkup([[
         InlineKeyboardButton(i, callback_data=str(i)) for i in range(1, 9)
@@ -144,11 +147,14 @@ def checkCorrectlyCaptcha(update, context):
                 if update.effective_user.username:
                     username = "@" + user.username
                 else:
-                    username = " ".join([user.first_name, user.last_name])
+                    try:
+                        username = " ".join([user.first_name, user.last_name])
+                    except:
+                        username = "*какая-то дичь, а не ник*"
 
                 context.bot.send_message(
                     chat_id=update.effective_chat.id,
-                    text="%s, капча введена не правильно, обратитесь к админу в течении 3-х дней для разблокировки." % username
+                    text="%s, капча введена не правильно, обратитесь к админу в течение 3-х дней для разблокировки." % username
                 )
                 cur.execute(
                     'UPDATE banlist SET time=%s WHERE user_id=%s AND chat_id=%s',
@@ -233,11 +239,11 @@ def main():
 if __name__ == "__main__":
     # Connect to DB
     con = psycopg2.connect(
-        database="",
-        user="",
-        password="",
-        host="",
-        port=""
+        database="chat",
+        user="admin",
+        password="123321456f",
+        host="127.0.0.1",
+        port="5432"
     )
 
     # Словарь для конвертация цифр на слова
