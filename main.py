@@ -239,10 +239,10 @@ def main():
 if __name__ == "__main__":
     # Connect to DB
     con = psycopg2.connect(
-        database="chat",
-        user="admin",
-        password="123321456f",
-        host="127.0.0.1",
+        database="database",
+        user="user",
+        password="password",
+        host="host",
         port="5432"
     )
 
