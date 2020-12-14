@@ -143,6 +143,19 @@ def checkCorrectlyCaptcha(update, context):
                         can_add_web_page_previews=True,
                     )
                 )
+# Если после входа пользователя в чат вы хотите что-то ему сказать - раскомментируйте фрагмент кода ниже
+#               try:
+#                   if update.effective_user.username:
+#                       username = "@" + user.username
+#                   else:
+#                       username = " ".join([user.first_name, user.last_name])
+#               except:
+#                   username = "*какая-то дичь, а не ник*"
+# 
+#               context.bot.send_message(
+#                   chat_id=update.effective_chat.id,
+#                   text="%s, добро пожаловать в чатик. Будь добр(а) прочесть правила" % username
+#               ) 
             else:
                 if update.effective_user.username:
                     username = "@" + user.username
